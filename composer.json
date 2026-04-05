@@ -1,0 +1,25 @@
+{
+    "name": "nyra/escpos",
+    "description": "Print Drivers for ESC/POS",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Nyra\\EscPos\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "René Preuß",
+            "email": "rene@preuss.io"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    }
+}
