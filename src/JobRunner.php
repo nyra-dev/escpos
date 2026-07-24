@@ -10,7 +10,7 @@ class JobRunner
     /**
      * @throws JsonException
      */
-    public function run(Printer $printer, array|string $payload): void
+    public function run(PrinterInterface $printer, array|string $payload): void
     {
         if (is_string($payload)) {
             $payload = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
@@ -46,7 +46,7 @@ class JobRunner
         }
     }
 
-    protected function printBase64Image(Printer $printer, string $base64, int $maxWidth): void
+    protected function printBase64Image(PrinterInterface $printer, string $base64, int $maxWidth): void
     {
         // Create a temporary file to leverage the existing GD logic in EscPosPrinter
         $tmpPath = tempnam(sys_get_temp_dir(), 'escpos_img_');

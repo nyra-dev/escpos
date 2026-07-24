@@ -2,13 +2,16 @@
 
 namespace Nyra\EscPos;
 
+use Nyra\EscPos\Concerns\BuildsRows;
 use RuntimeException;
 
 /**
  * Super-einfache ESC/POS Klasse für Netzwerk-Thermodrucker (TCP / Port 9100)
  */
-class Printer
+class Printer implements PrinterInterface
 {
+    use BuildsRows;
+
     private string $host;
     private int $port;
     private mixed $socket = null;
@@ -105,23 +108,7 @@ class Printer
 
     public function row(array $cols, array $widths, string $separator = ' '): self
     {
-        $out = '';
-        $count = min(count($cols), count($widths));
-        for ($i = 0; $i < $count; $i++) {
-            $w = max(1, (int)$widths[$i]);
-            $cell = (string)$cols[$i];
-            $cell = $this->safeSubstr($cell, 0, $w);
-
-            if (preg_match('/^\s*[-+]?\d+([.,]\d+)?\s*$/u', $cell)) {
-                $cell = str_pad($cell, $w, ' ', STR_PAD_LEFT);
-            } else {
-                $cell = str_pad($cell, $w, ' ', STR_PAD_RIGHT);
-            }
-
-            $out .= $cell;
-            if ($i < $count - 1) $out .= $separator;
-        }
-        return $this->line(rtrim($out));
+        return $this->line($this->buildRow($cols, $widths, $separator));
     }
 
     public function barcodeCode128(string $data, int $height = 80, int $moduleWidth = 3, int $hri = 2): self
@@ -169,14 +156,6 @@ class Printer
         }
         fwrite($this->socket, $bytes);
         return $this;
-    }
-
-    private function safeSubstr(string $s, int $start, int $length): string
-    {
-        if (function_exists('mb_substr')) {
-            return mb_substr($s, $start, $length, 'UTF-8');
-        }
-        return substr($s, $start, $length);
     }
 
     /**
