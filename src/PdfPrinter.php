@@ -233,9 +233,6 @@ class PdfPrinter implements PrinterInterface
             }
         }
 
-        imagedestroy($img);
-        imagedestroy($resized);
-
         $this->flushBufferIfPending();
         $this->ops[] = [
             'type' => 'image',

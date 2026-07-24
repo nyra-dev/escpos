@@ -226,9 +226,6 @@ class Printer implements PrinterInterface
             }
         }
 
-        imagedestroy($img);
-        imagedestroy($resized);
-
         // Send GS v 0 command (Print raster bit image)
         // m=0 (normal), xL, xH, yL, yH
         $xL = $bytesPerRow & 0xFF;
